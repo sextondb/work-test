@@ -48,7 +48,14 @@ namespace api.Repositories
 
         public async Task DeleteAsync(int userId, int id)
         {
-            throw new NotImplementedException();
+            var sql = @"
+                DELETE
+                FROM records
+                WHERE userId = @userid
+                    and Id = @id;
+            ";
+
+            await connection.ExecuteAsync(sql, new { userId, id });
         }
 
         public async Task<BusinessContactRecord> GetAsync(int userId, int id)

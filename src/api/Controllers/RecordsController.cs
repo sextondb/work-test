@@ -59,9 +59,10 @@ namespace api.Controllers
 
         // DELETE api/users/1/records/5
         [HttpDelete("{id}")]
-        public async Task Delete(int userId, int id)
+        public async Task<ActionResult> Delete(int userId, int id)
         {
-            throw new NotImplementedException();
+            await recordRepository.DeleteAsync(userId, id);
+            return NoContent();
         }
     }
 }
