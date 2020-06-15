@@ -32,8 +32,8 @@ namespace api.Controllers
         }
 
         // GET api/users/1/records/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<BusinessContactRecord>> Get(int userId, int id)
+        [HttpGet("{id}", Name = nameof(GetById))]
+        public async Task<ActionResult<BusinessContactRecord>> GetById(int userId, int id)
         {
             var record = await recordRepository.GetAsync(userId, id);
             if (record == null)
@@ -45,9 +45,11 @@ namespace api.Controllers
 
         // POST api/users/1/records
         [HttpPost]
-        public async Task Post(int userId, [FromBody] BusinessContactRecord record)
+        public async Task<ActionResult> Post(int userId, [FromBody] BusinessContactRecord record)
         {
-            throw new NotImplementedException();
+            var id = await recordRepository.InsertAsync(userId, record);
+            record.Id = id;
+            return CreatedAtRoute(nameof(GetById), new { userId, id }, record);
         }
 
         // PUT api/users/1/records/5

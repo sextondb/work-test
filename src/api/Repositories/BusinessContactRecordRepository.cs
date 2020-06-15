@@ -131,7 +131,7 @@ namespace api.Repositories
                        ,[AddressPostalCode])
                 OUTPUT INSERTED.Id
                 VALUES (
-                     @UserId
+                     @userId
                     ,@Name
                     ,@Email
                     ,@Line1
@@ -145,7 +145,7 @@ namespace api.Repositories
 
             var id = await connection.QuerySingleAsync<int>(sql, new
             {
-                record.UserId,
+                userId,
                 record.Name,
                 record.Email,
                 record.Address.Line1,
