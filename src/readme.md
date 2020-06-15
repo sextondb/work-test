@@ -41,3 +41,8 @@
 
 # Decision Log
 - Integrating a user identity system that is actually secure, and is able to be set up without putting secrets in source control, does not seem reasonable given the constraints on this project.  As such, the project will assume that user separation is required, but that integration into an existing (or new) user identity system would be done at a later time.
+- The project will assume that there is a single address for each business contact record, given that the initial MVP does not give any hints that this is otherwise (even though in the real world multiple addresses are common)
+- The project will assume that 'simple database' means "as simple as reasonble" as long as the goals for performance and scalability are met.
+- Addresses are often modelled as separate database entities, however this project will use the concept of 'table splitting'. As there is an exact 1-to-1 relationship between Business Contact Records and Addresses and choosing this direction simplifies the data access code.  Choosing otherwise at this stage implies YAGNI and more complex code.
+- SQL Server 2019 express has be the chosen database system.
+- Dapper has been chosen as the data access method of choice.  This is primarily due to conversations with Matthew about the use of EF as a default.
