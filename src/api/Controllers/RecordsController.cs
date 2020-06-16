@@ -54,9 +54,18 @@ namespace api.Controllers
 
         // PUT api/users/1/records/5
         [HttpPut("{id}")]
-        public async Task Put(int userId, int id, [FromBody] BusinessContactRecord record)
+        public async Task<ActionResult> Put(int userId, int id, [FromBody] BusinessContactRecord record)
         {
-            throw new NotImplementedException();
+            var rowsUpdatd = await recordRepository.UpdateAsync(userId, id, record);
+            if (rowsUpdatd == 0)
+            {
+                // Cannot use PUT to create rows, use POST instead
+                return BadRequest();
+            }
+            else
+            {
+                return NoContent();
+            }
         }
 
         // DELETE api/users/1/records/5

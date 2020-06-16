@@ -87,7 +87,7 @@ namespace api.Repositories
             return record;
         }
 
-        public async Task UpdateAsync(int userId, BusinessContactRecord record)
+        public async Task<int> UpdateAsync(int userId, int id, BusinessContactRecord record)
         {
             var sql = @"
                 UPDATE [dbo].[Records]
@@ -98,14 +98,14 @@ namespace api.Repositories
                     ,[AddressCity] = @City
                     ,[AddressStateOrProvince] = @StateOrProvince
                     ,[AddressPostalCode] = @PostalCode
-                WHERE UserId = @UserId
-                    AND Id = @ID
+                WHERE UserId = @userId
+                    AND Id = @id
             ";
 
-            var id = await connection.ExecuteAsync(sql, new
+            var rowsUpdated = await connection.ExecuteAsync(sql, new
             {
-                record.UserId,
-                record.Id,
+                userId,
+                id,
                 record.Name,
                 record.Email,
                 record.Address.Line1,
@@ -115,6 +115,7 @@ namespace api.Repositories
                 record.Address.PostalCode
             });
 
+            return rowsUpdated;
         }
 
         public async Task<int> InsertAsync(int userId, BusinessContactRecord record)
