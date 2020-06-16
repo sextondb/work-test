@@ -7,6 +7,7 @@ using api.Models;
 using api.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.ObjectPool;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -49,6 +50,7 @@ namespace api.Controllers
         {
             var id = await recordRepository.InsertAsync(userId, record);
             record.Id = id;
+            record.UserId = userId;
             return CreatedAtRoute(nameof(GetById), new { userId, id }, record);
         }
 
