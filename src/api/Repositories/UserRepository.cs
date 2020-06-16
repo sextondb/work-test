@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using api.Models;
 using Dapper;
-using Microsoft.AspNetCore.Mvc;
 
 namespace api.Repositories
 {
