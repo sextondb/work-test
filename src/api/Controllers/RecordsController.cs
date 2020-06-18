@@ -26,14 +26,18 @@ namespace api.Controllers
 
         // GET: api/users/1/records/paged?page=1&pageSize=5
         [HttpGet("paged")]
-        public async Task<PagedResult<IEnumerable<BusinessContactRecord>>> GetPaged(int userId, int page, int? pageSize)
+        public async Task<PagedResult<IEnumerable<BusinessContactRecord>>> GetPaged(int userId, int? page, int? pageSize)
         {
+            if (!page.HasValue)
+            {
+                page = 1;
+            }
             if (!pageSize.HasValue)
             {
                 pageSize = 5;
             }
 
-            return await recordRepository.GetAllPagedAsync(userId, pageSize.Value, page);
+            return await recordRepository.GetAllPagedAsync(userId, pageSize.Value, page.Value);
         }
 
         // GET api/users/1/records/5
