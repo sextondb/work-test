@@ -7,6 +7,9 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Title from './Title';
+import { BusinessContactRecord } from '../interfaces';
+import useSWR from 'swr';
+import fetch from '../utils/fetch';
 
 // Generate Order Data
 function createData(id: number, date: string, name: string, shipTo: string, paymentMethod: string, amount: number) {
@@ -33,36 +36,37 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Records() {
     const classes = useStyles();
+    const { data, error } = useSWR<BusinessContactRecord[]>('http://localhost:5000/api/users/562/records', fetch)
+    const rows = data;
     return (
         <React.Fragment>
             <Title>Business Contacts</Title>
             <Table size="small">
                 <TableHead>
                     <TableRow>
-                        <TableCell>Date</TableCell>
                         <TableCell>Name</TableCell>
-                        <TableCell>Ship To</TableCell>
-                        <TableCell>Payment Method</TableCell>
-                        <TableCell align="right">Sale Amount</TableCell>
+                        <TableCell>Email</TableCell>
+                        <TableCell>Address Line1</TableCell>
+                        <TableCell>Address Line2</TableCell>
+                        <TableCell>Address City</TableCell>
+                        <TableCell>Address State/Province</TableCell>
+                        <TableCell>Address Postal Code</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((row) => (
+                    {error ? null : rows.map((row) => (
                         <TableRow key={row.id}>
-                            <TableCell>{row.date}</TableCell>
                             <TableCell>{row.name}</TableCell>
-                            <TableCell>{row.shipTo}</TableCell>
-                            <TableCell>{row.paymentMethod}</TableCell>
-                            <TableCell align="right">{row.amount}</TableCell>
+                            <TableCell>{row.email}</TableCell>
+                            <TableCell>{row.address.line1}</TableCell>
+                            <TableCell>{row.address.line2}</TableCell>
+                            <TableCell>{row.address.city}</TableCell>
+                            <TableCell>{row.address.stateOrProvince}</TableCell>
+                            <TableCell>{row.address.postalCode}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
             </Table>
-            <div className={classes.seeMore}>
-                <Link color="primary" href="#" onClick={preventDefault}>
-                    See more contacts
-                </Link>
-            </div>
         </React.Fragment>
     );
 }
