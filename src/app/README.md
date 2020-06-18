@@ -10,5 +10,6 @@ Augmented with information from:
 - 
 
 Steps to run:
+- npm install
 - npm run dev
 - navigate to http://localhost:3000 in a browser
