@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -42,6 +43,49 @@ namespace api.Repositories
             );
 
             return records;
+        }
+
+        public async Task<PagedResult<IEnumerable<BusinessContactRecord>>> GetAllPagedAsync(int userId, int pageSize, int page)
+        {
+            if(pageSize <= 0 || page < 0)
+            {
+                throw new ArgumentException();
+            }
+
+            var rowOffset = pageSize * (page - 1);
+
+            var sql = @"
+                SELECT UserId
+                    ,Id
+                    ,Name
+                    ,Email
+                    ,AddressLine1 as Line1
+                    ,AddressLine2 as Line2
+                    ,AddressCity as City
+                    ,AddressStateOrProvince as StateOrProvince
+                    ,AddressPostalCode as PostalCode
+                FROM records
+                WHERE userId = @userid
+                ORDER BY Id
+                OFFSET @rowOffset ROWS
+                FETCH NEXT @pageSize ROWS ONLY;
+                
+                SELECT count(*)
+                FROM records
+                WHERE userId = @userid;
+            ";
+
+
+            var multiResult = await connection.QueryMultipleAsync(sql, new { userId, rowOffset, pageSize });
+            var records = multiResult.Read<BusinessContactRecord, BusinessContactAddress, BusinessContactRecord>((record, address) =>
+            {
+                record.Address = address;
+                return record;
+            }, splitOn: "Line1");
+
+            var totalCount = multiResult.ReadFirst<int>();
+
+            return new PagedResult<IEnumerable<BusinessContactRecord>>() { Data = records, Page = page, PageSize = pageSize, TotalCount = totalCount};
         }
 
         public async Task DeleteAsync(int userId, int id)

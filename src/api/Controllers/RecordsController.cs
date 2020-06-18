@@ -24,6 +24,18 @@ namespace api.Controllers
             return await recordRepository.GetAllAsync(userId);
         }
 
+        // GET: api/users/1/records/paged?page=1&pageSize=5
+        [HttpGet("paged")]
+        public async Task<PagedResult<IEnumerable<BusinessContactRecord>>> GetPaged(int userId, int page, int? pageSize)
+        {
+            if (!pageSize.HasValue)
+            {
+                pageSize = 5;
+            }
+
+            return await recordRepository.GetAllPagedAsync(userId, pageSize.Value, page);
+        }
+
         // GET api/users/1/records/5
         [HttpGet("{id}", Name = nameof(GetById))]
         public async Task<ActionResult<BusinessContactRecord>> GetById(int userId, int id)
