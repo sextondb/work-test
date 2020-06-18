@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using api.Models;
 using api.Repositories;
@@ -84,6 +86,43 @@ namespace api.Controllers
         {
             await recordRepository.DeleteAsync(userId, id);
             return NoContent();
+        }
+
+
+        // GET api/users/1/records/generate
+        // Not that we break idempotency rules by using GET to dramatically change state.
+        // This is done only for ease of use while testing
+        [HttpGet("generate")]
+        public async Task<ActionResult> GenerateFakeData([FromServices] UserRepository userRepository, int userId)
+        {
+            var username = "User-" + userId.ToString();
+            await userRepository.ForceInsertAsync(new User() { Username = username, Id = userId });
+            var rand = new Random();
+            
+            var cities = new List<string> { "Newberg", "Hillsdale", "Portland", "Lincoln City" };
+            var states = new List<string> { "OR", "NE", "CA", "NY" };
+            var streets = new List<string> { "Aquarius", "Elm", "Division", "Main" };
+
+            for (int i = 0; i < 1000; i++)
+            {
+                var record = new BusinessContactRecord()
+                {
+                    UserId = userId,
+                    Name = "Customer " + rand.Next(),
+                    Email = $"Test-{rand.Next()}@example.com",
+                    Address = new BusinessContactAddress()
+                    {
+                        Line1 = $"{rand.Next(1000, 9999)} {streets[rand.Next(streets.Count)]} street",
+                        Line2 = "",
+                        City = cities[rand.Next(cities.Count)],
+                        StateOrProvince = states[rand.Next(states.Count)],
+                        PostalCode = rand.Next(10000, 99999).ToString()
+                    }
+                };
+                await recordRepository.InsertAsync(userId, record);
+            }
+
+            return Ok();
         }
     }
 }

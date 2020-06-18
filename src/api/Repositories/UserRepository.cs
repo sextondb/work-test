@@ -31,6 +31,33 @@ namespace api.Repositories
             return await connection.QueryFirstAsync<User>("select * from users where id = @id", new { id });
         }
 
+        public async Task ForceInsertAsync(User user)
+        {
+            var sql = @"
+                IF NOT EXISTS (SELECT * FROM [dbo].[Users] WHERE [id] = @id)
+	                BEGIN
+		                BEGIN TRY
+			                SET IDENTITY_INSERT [dbo].[Users] ON;
+			                INSERT INTO [dbo].[Users]
+			                ([id], [Username])
+			                VALUES (
+				                @id,
+				                @username
+			                );
+		                END TRY
+		                BEGIN CATCH
+			                SET IDENTITY_INSERT [dbo].[Users] OFF;
+		                END CATCH
+	                END
+            ";
+
+            await connection.ExecuteAsync(sql, new
+            {
+                user.Id,
+                user.Username
+            });
+        }
+
         public void Dispose()
         {
             connection.Dispose();
