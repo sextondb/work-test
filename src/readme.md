@@ -51,7 +51,8 @@
 - The clustered index on the records table will be a composite key of the fields (UserId, Id) in that order.  This is an optimization to limit the impact of list operations inside of multi-tenant databases.  Under this scheme, all records for a particular user are located together in consecutive pages.  This reduces the impact of physical reads when serving list operations, as it reduces the likelyhood that multiple users will have row data in a single page, which would increase the raw number of pages needed to be read in order to fulfil a query.
   - For example, if an average row is 512 bytes in size, then a page can hold ~16 records.  Under this scheme, the likelyhood of each of those ~16 records belonging to one user is very high.  Under a schema where the clustered index is solely on the id, and with a user count in the 20k+ range, then the likelyhood of a page containing more than one record is extremely low. Thus for a user with 1000 records, those records are located on ~63 physical pages, vs being located on ~1000 physical pages.
   - Note that the tradeoff is that in some cases, page splits will happen when rows are inserted into nearly full pages.  However, this is mitigated by having appropriate fill factors and doing continuing online index reorganization, which are practices that should be done on a regular basis anyways.
-
+- The project will use Next.js (based on React) and Material UI as the modern UI framework
+  - The primary developers are most familiar with react, have never worked with Next.js before, and wish to highlight the quality of work when working within a new technology with no experience and limited time to prepare.
 
 # Informal Performance Analysis
 
