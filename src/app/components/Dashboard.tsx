@@ -14,6 +14,8 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import Head from 'next/head';
 import Records from './Records';
 import Copyright from './Copyright';
+import Editable from './EditableTable';
+import EditableTable from './EditableTable';
 
 
 
@@ -100,13 +102,16 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Dashboard() {
     const classes = useStyles();
-
     return (
         <div className={classes.root}>
             <Head>
                 <title>Dashboard</title>
                 <meta charSet="utf-8" />
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+                <link
+                    rel="stylesheet"
+                    href="https://fonts.googleapis.com/icon?family=Material+Icons"
+                />
             </Head>
             <CssBaseline />
             <AppBar position="absolute" className={classes.appBar}>
@@ -127,7 +132,7 @@ export default function Dashboard() {
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
                             <Paper className={classes.paper}>
-                                <Records></Records>
+                                <EditableTable></EditableTable>
                             </Paper>
                         </Grid>
                     </Grid>

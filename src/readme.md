@@ -24,10 +24,10 @@
 - User: A user is a website user. They own business contact records.
 
 # MVP Feature Backlog (Funcitional requirements)
-- [ ] Create a login screen for a user
-- [ ] Create a dashboard with a list of contact records
-- [ ] Allow the list of contact records to be paged
-- [ ] Allow the list of contact records to be scrolled
+- [x] Create a login screen for a user
+- [x] Create a dashboard with a list of contact records
+- [x] Allow the list of contact records to be paged
+- [x] Allow the list of contact records to be scrolled
 - [ ] Allow adding a contact record
 - [ ] Allow editing a contact record
 - [ ] Allow deleting a contact record
@@ -53,6 +53,7 @@
   - Note that the tradeoff is that in some cases, page splits will happen when rows are inserted into nearly full pages.  However, this is mitigated by having appropriate fill factors and doing continuing online index reorganization, which are practices that should be done on a regular basis anyways.
 - The project will use Next.js (based on React) and Material UI as the modern UI framework
   - The primary developers are most familiar with react, have never worked with Next.js before, and wish to highlight the quality of work when working within a new technology with no experience and limited time to prepare.
+- Some features (primarily updating records) were omitted due to a lack of time.  The API does support the actions, but hooks for the app were not completed.
 
 # Informal Performance Analysis
 

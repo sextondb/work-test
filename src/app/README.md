@@ -10,6 +10,14 @@ Augmented with information from:
 - 
 
 Steps to run:
-- npm install
-- npm run dev
-- navigate to http://localhost:3000 in a browser
+- open two command windows, and a browser
+- start the api
+ - in a one of the command windows, navigate to the api folder
+ - dotnet restore
+ - dotnet run
+ - navigate to http://localhost:5000/api/users/1/records/generate to create fake data for a user with user id of 1
+- start the app
+ - in the other command window, navigate to the app folder
+ - npm install
+ - npm run dev
+ - navigate to http://localhost:3000 in a browser
