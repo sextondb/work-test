@@ -11,6 +11,8 @@ namespace api
 {
     public class Startup
     {
+        readonly string DevelopmentAppOrigin = "_developmentAppOrigin";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -26,6 +28,12 @@ namespace api
             services.AddTransient<IDbConnection>((sp) => new SqlConnection(Configuration.GetConnectionString("ApiDatabase")));
             services.AddScoped<BusinessContactRecordRepository>();
             services.AddScoped<UserRepository>();
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: DevelopmentAppOrigin,
+                    builder => { builder.WithOrigins("http://localhost:3000"); }
+                );
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -34,6 +42,7 @@ namespace api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseCors(DevelopmentAppOrigin);
             }
 
             app.UseRouting();
